@@ -1,43 +1,99 @@
 
-// start game when key is pressed
-document.addEventListener('keypress', (event) => {
-    console.log(event);
-})
 
-// create an array of words to guess
-const wordToGuess = ["dog", "cat", "lion", "tiger", "bear", "elephant", "rhinosaurus", "penguin", "coyote", "horse"];
-console.log(wordToGuess);
 
-// computer chooses word randomly
-let randomNumber = Math.floor(Math.random() * wordToGuess.length);
-console.log(randomNumber);  
+var wordToGuess = ["dog", "cat", "lion", "tiger", "bear", "elephant", "rhinosaurus", "penguin", "coyote", "horse"];
+var computerChoice = "";
+var underScore = [];
+var letters = [];
+var wordProgress = [];
+var wrongGuesses = [];
 
-let computerChoice = wordToGuess[randomNumber];
-console.log(computerChoice);
+var wins = 0;
+var losses = 0;
+var guessesLeft = 9;
 
-// create underscores based on length of word
-let underScore = [];
+function startGame() {
 
-let createUnderScore = function() {
-    for(let i = 0; i < computerChoice.length; i++){
-    underScore.push('_');
+
+
+    computerChoice = wordToGuess[Math.floor(Math.random() * wordToGuess.length)];
+    console.log(computerChoice);
+
+    guessesLeft = 9;
+    wrongGuesses = [];
+    wordProgress = [];
+    underScore = []
+
+
+    for (let i = 0; i < computerChoice.length; i++) {
+        underScore.push('_');
     }
-    return underScore;
+    console.log(underScore)
+    document.getElementById("word-blanks").innerHTML = wordProgress.join(" ");
+    document.getElementById("guesses-left").innerHTML = guessesLeft;
+    document.getElementById("win-counter").innerHTML = wins;
+    document.getElementById("loss-counter").innerHTML = losses;
+
+
+
+    document.onkeyup = function (event) {
+        var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+
+
+        if (userGuess == computerChoice) {
+            document.getElementById("word-blanks").innerHTML = userGuess;
+        }
+
+
+        function checkGuess(guess) {
+            var isUserCorrect = false;
+            for (var i = 0; i < underScore; i++) {
+                if (computerChoice[i] == letter) {
+                    isUserCorrect = true;
+            }
+        }
+
+        if (isUserCorrect) {
+
+
+            for (var i = 0; i < underScore; i++) {
+                if (computerChoice[i] == guess) {
+                    wordProgress[i] = guess;
+                }
+            }
+        }
+        else {
+            wrongGuesses.push(guess)
+            guessesLeft--;
+        }
+        
+    }
+    
+    
+    function userWin() {
+        console.log("win Count " + wins + " | Loss Count: " + losses + " | Guesses Left: " + guessesLeft)
+
+        document.getElementById("guesses-left").innerHTML = guessesLeft;
+        document.getElementById("word-blanks").innerHTML = wordProgress.join(" ");
+        document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
+        if (letters.toString() == wordProgress.toString()) {
+            wins++;
+            alert("You Win!")
+            document.getElementById("win-counter").innerHTML = winCount;
+            startGame();
+        } else if (guessesLeft == 0) {
+            losses++;
+            alert("You Lose!");
+            document.getElementById("loss-counter")
+            startGame();
+        }
+    }
+    
+
+
+
+
+
 }
-console.log(createUnderScore())
-
-// get users guess
-let userGuess = document.addEventListener('keypress', (event) => {
-    console.log(userGuess);   
-})
-
-// check if guess is right 
-
-
-
-//if guess is right replace underscore with correct guess
-
-// if guess is wrong, move letter to wrong guesses
-// if word is guessed completely add point to wins
-// if user runs out of guesses and word is not complete, move to losses
+startGame();
 
